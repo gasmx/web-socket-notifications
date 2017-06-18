@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt_BR">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Recebedor de notificações</title>
+	<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+	<style type="text/css">
+		body {
+			margin: 0;
+			padding: 0;
+			font: 15px 'Trebuchet MS', Arial, sans-serif;
+		}
+	</style>
+</head>
+<body>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+	<script src="http://192.168.25.22:4555/socket.io/socket.io.js"></script>
+	<script>
+
+	$(document).ready(function(){
+		var socket = io('http://192.168.25.22:4555', {transports: ['websocket', 'polling', 'flashsocket']});
+	  	socket.on('notificacao', function (data) {
+	    	toastr[data.type](data.msg);
+	  	});
+	});
+
+	</script>
+</body>
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt_BR">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Recebedor de notificações</title>
+	<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+	<style type="text/css">
+		body {
+			font: 15px 'Trebuchet MS', Arial, sans-serif;
+		}
+
+		form {
+			width: 100%;
+		}
+
+		div.container {
+			width: 30vw;
+			margin: 0 auto;
+			text-align: center;
+		}
+
+		input, select {
+			padding: 5px;
+			width: 30%;
+			margin: 10px 0 10px 0;
+		}
+
+		input[type="text"] {
+			width: 90%;
+		}
+
+		select {
+			width: 93%;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<h1>Notificar clientes</h1>
+		<form action="http://192.168.25.22:8080/api/notificar" method="GET">
+			<p>
+				<label>Tipo de notificação:</label>
+				<select name="tipo" id="tipo">
+					<option value="info">Info</option>
+					<option value="error">Error</option>
+					<option value="success">Success</option>
+				</select>
+			</p>
+
+			<p>
+				<label>Mensagem</label>
+				<input type="text" name="notificacao" id="notificacao" width="100">
+			</p>
+
+			<p><input type="submit" value="Enviar notificação"></p>
+		</form>
+	</div>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+	<script src="http://192.168.25.22:4555/socket.io/socket.io.js"></script>
+	<script>
+
+	$(document).ready(function(){
+	  	$('form').submit(function(){
+	  		if (!$('#notificacao').val()) {
+	  			$('#notificacao').focus();
+	  			return false;
+	  		}
+
+	  		var type = $("#tipo option:selected").val();
+
+	  		$.ajax({
+	  			type: $(this).attr('method'),
+	  			url: $(this).attr('action'),
+	  			data: {
+	  				[type]: $('#notificacao').val()
+	  			},
+	  			dataType: 'json',
+	  			success: data => {
+	  				console.log("Notificação enviada");
+	  			}
+	  		});
+
+	  		return false;
+	  	});
+	});
+
+	</script>
+</body>
+</html>
